@@ -38,7 +38,7 @@ Every agent task across the AIQ ecosystem must execute the following sequential 
 12. MEASURE
    └── Analyze real behavior (PostHog / Sentry).
 13. LEARN
-   └── Distill insights into new generalized Builder OS Skills.
+   └── capture reusable lesson → propose/update existing skill or playbook where appropriate → otherwise register as V2 candidate → never silently create Skill #16 or alter governance.
 ```
 
 ---
