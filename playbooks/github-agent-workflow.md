@@ -4,6 +4,8 @@
 **Status:** CANONICAL WORKFLOW SPECIFICATION  
 **Governing Principle:** *"Minimum sufficient context. Maximum required evidence. Zero unearned autonomy."*
 
+> 🎓 **Learning & Exploration:** For read-only learning and exploration, use the [Mr.AI Guided Tour / Teacher Mode](mrai-guided-tour-teacher-mode.md). If the session produces a requested software change, return to this Golden Path before any modification.
+
 ---
 
 ## 1. The Universal Agent Lifecycle
