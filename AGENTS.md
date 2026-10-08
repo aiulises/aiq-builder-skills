@@ -9,3 +9,5 @@ Keep one authoritative source per fact. Separate AI inference from persisted tru
 Do not commit, push, deploy, publish, send customer messages, spend money or change external automation without explicit authority for that action. Report the exact proof and remaining gap.
 
 For cross-repository sequencing, quality and proof gates, consult [AIQ Cross-Repo Agent Quality Gates](playbooks/AIQ_CROSS_REPO_AGENT_QUALITY_GATES.md) **after** the target repo's own instructions. Do not load every skill or override canonical V1 skill ownership.
+
+Before installing third-party agent skills or adding an agent sandbox to Hetzner, follow [NVIDIA SkillSpector/OpenShell security adoption runbook](playbooks/NVIDIA_SKILLSPECTOR_OPENSHELL_HETZNER_SECURITY.md). Scan before install, pin provenance, stage in isolation, review privacy, and require owner GO for production.
