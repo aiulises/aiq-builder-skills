@@ -1,0 +1,21 @@
+name: AIQ Tech Security Radar
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '19 7 * * 1'
+permissions:
+  contents: read
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect public source metadata (no LLM, no secrets)
+        run: python3 scripts/aiq_tech_radar.py --output aiq-radar-report.md
+      - name: Upload private workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aiq-tech-security-radar
+          path: aiq-radar-report.md
+          retention-days: 14
