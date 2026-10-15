@@ -7,3 +7,5 @@ Audit before building. Identify canonical checkout, branch, status, diff, archit
 Keep one authoritative source per fact. Separate AI inference from persisted truth, test output from deployment, and deployment from user-visible proof. Preserve user edits and use isolated worktrees for simultaneous writers.
 
 Do not commit, push, deploy, publish, send customer messages, spend money or change external automation without explicit authority for that action. Report the exact proof and remaining gap.
+
+For UI/UX, content, screen layout, responsiveness and interaction reviews, read [`playbooks/aiq-premium-experience-standard.md`](playbooks/aiq-premium-experience-standard.md). It is a support playbook, not a new canonical skill. Inventory gaps first; follow the target product's design system and security gates.
