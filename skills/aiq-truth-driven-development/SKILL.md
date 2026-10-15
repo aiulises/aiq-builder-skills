@@ -1,58 +1,71 @@
 ---
 name: aiq-truth-driven-development
-description: Evidence-first AI-assisted software engineering. Audit existing code, implement minimal changes, independently challenge claims, verify real behavior, and promote proven lessons to reusable skills.
+description: Risk-adaptive, evidence-first AI software engineering. Audit existing work, model risks, test first, build minimally, verify, challenge claims, learn from reproduced errors, and require human release approval.
 status: supporting-skill
-version: 0.1.0
+version: 0.2.0
 canonical_v1: false
 ---
 
-# AIQ Truth-Driven Development
-**AIQ Builder Skills · Build. Verify. Challenge. Learn.**
+# AIQ Truth-Driven Development · V2
+**Build smarter. Learn visually. Ship safely.**
+**Core principle:** An agent's claim is not evidence. A green test only proves the specific behavior exercised in its actual environment. Never invent PASS, deployment, security guarantees or independent verification.
 
-## Core rule
-An AI agent's statement is a hypothesis, **not evidence**. A passing test proves only the behavior and environment actually exercised. Never report PASS, secure, production-ready, deployed or fixed without direct, reproducible proof. When evidence is missing, say UNKNOWN.
+## When to activate
+Use for any AI-assisted implementation, refactor, security change, bug fix or release review. Scale verification by risk rather than forcing expensive checks on every change.
 
-## Six-stage workflow
-1. **AUDIT** — Inspect the actual repo, branch, git status, relevant code, architecture, data boundaries, existing tests and owner. Classify ALREADY EXISTS / PARTIAL / MISSING / LEGACY / DO NOT REBUILD. Read the target product's rules and roadmap. Avoid duplicate features.
-2. **BUILD** — Propose the smallest change with scope, risk, rollback and acceptance criteria. Obtain explicit authorization before editing when required by repo policy. Use an isolated branch/worktree. Preserve user data and secrets.
-3. **VERIFY** — Run type checks, unit/integration tests, authorization/negative tests and relevant end-to-end checks. Record exact commands, exit codes, environment and tested paths. Verify actual HTTP routing, database boundaries and UI interaction where applicable. Do not conflate mocked tests with live database or production validation.
-4. **CHALLENGE** — Deliberately try to disprove the claimed success: inspect adjacent routes, role/permission boundaries, read-vs-write, cross-tenant IDs, malformed inputs, missing auth, service-worker identities, failure modes, regressions and whether test fixtures hide bugs. Prefer an independent reviewer or a separate adversarial pass; independence must not be invented.
-5. **LEARN** — Record a reproducible issue -> root cause -> fix -> verification -> reusable rule. Only promote a lesson to shared skills when grounded in observed evidence. Avoid turning a one-off assumption into universal policy. Preserve source provenance and canonical V1 freeze.
-6. **FOUNDER GO** — Summarize evidence, risks, and the exact proposed next action. Require distinct approval for commit, push, merge, deploy, destructive tests, production access, spending, or external communication. Documentation is not deployment permission.
+### Risk gate — FAST vs STRICT
+- **FAST**: copy, styling, low-impact isolated UI. Require scoped audit, minimal diff, appropriate checks and human approval where repo policy requires it.
+- **STRICT**: authentication, authorization, tenant data, database, payments, secrets, background workers, destructive changes, infrastructure, migrations and deployments. Require explicit threat scenarios, tests first when feasible, negative/positive coverage, independent challenge and rollback.
+- **UNKNOWN risk**: classify STRICT until understood.
+- The target repo's more restrictive rules always win. A FAST classification does not bypass Founder GO.
 
-## Truth labels
-- **VERIFIED** — directly supported by reproducible evidence, with exact scope.
-- **PARTIAL** — some checks pass; meaningful gaps remain.
-- **FAILED** — a test or requirement is demonstrably not met.
-- **UNKNOWN** — not tested or evidence unavailable.
-- **BLOCKED** — cannot safely proceed until a dependency or approval is resolved.
+## Seven gates (test-first V2)
+1. **AUDIT** — Confirm actual repo, branch, HEAD, status, rules, roadmap, affected files and data flow. Classify ALREADY EXISTS / PARTIAL / MISSING / LEGACY / DO NOT REBUILD. Establish a baseline and list unknowns.
+2. **THREAT & TEST FIRST** — State expected behavior and misuse cases *before* implementation. For STRICT changes, define a small threat model: assets, actors, trust boundaries, entry points, abuse cases and mitigations. Write focused failing tests when feasible; if not feasible, state why and design a verifiable alternative. Do not manufacture a red test.
+3. **BUILD** — Propose and implement the smallest authorized change in an isolated branch/worktree; preserve data, secrets and user edits. Explain how to revert. No unapproved scope expansion.
+4. **VERIFY** — Run relevant type checks, lint, unit, integration, real-route and database tests, device checks where appropriate. Capture exact commands, environment, exit codes, assertions and test data isolation. Distinguish mocked, local, staging and production evidence.
+5. **CHALLENGE** — Try to disprove the result: permission vs operation, read/write, ID tampering, tenant boundaries, workers, error paths, concurrency, regressions and test blind spots. Use independent review where available; a second pass by the same agent is not independent. For high-value critical tests, consider property-based testing or mutation testing **in a safe isolated environment**, never production. Record any surviving mutants and what they imply.
+6. **LEARN** — For reproducible failures, record observed issue -> reproduction -> root cause -> fix -> verification -> generalized lesson -> limits. Update MEMORY.md only with evidence; do not claim a proposed fix is verified. Promote to reusable skills only after review and with provenance.
+7. **FOUNDER GO** — Report scope-limited VERIFIED / PARTIAL / FAILED / UNKNOWN / BLOCKED, remaining risks, and exact next action. Distinct explicit approvals for edit, commit, push, merge, deploy, spending, destructive tests and external communications as required by project policy.
 
-Do not mark a feature GREEN because an agent wrote “16/16 PASS” if only a limited matrix was exercised. Say precisely *what* passed and *what* was not checked.
+## Acceptance matrix (especially STRICT)
+| Check | Expected evidence |
+| --- | --- |
+| Correct role | Authorized action succeeds with real permission context |
+| Wrong role | 403 or appropriate denial, not just a mocked helper |
+| No login | 401 at actual route boundary |
+| Cross-tenant | No read, write, enumeration or ID leakage across tenants |
+| Read vs write | Read privilege alone cannot mutate records |
+| Malformed/tampered ID | Fail closed with no data disclosure |
+| Worker/service identity | Background jobs keep functioning under correct non-human permissions |
+| Regression | Previously working legitimate flows still pass |
+| Data safety | Test isolation, safe migrations, restore and rollback where applicable |
 
-## Standard truth-audit report
-- Goal and authorized scope
-- Repo / branch / commit / dirty files
-- Claims vs evidence table: CLAIM | OBSERVATION | TEST/FILE | VERDICT
-- Tests run (exact command, environment, exit code)
-- Adversarial checks, missing coverage and counterexamples
-- Security: authn/authz, read/write roles, tenant isolation, workers, secrets, data safety, rollback
-- Remaining risks and UNKNOWN items
-- Recommended next action: GO / NO-GO with exact boundary
-- Reusable lesson to capture, if verified
+Check the implementation AND whether the tests would fail if the security control were absent. Passing a limited matrix never means the entire product is secure.
 
-## Visual Architect teaching mode
-Explain technical structures using familiar physical-business metaphors, then map them back to real files and security controls:
-- `index.html` = front door; `src/` = workshop; `components/` = reusable workstations
-- Database = records archive; authentication = identity check; authorization = which keys open which rooms
-- Tenant isolation = different salons share the building but cannot access each other's customer files
-- Tests = rehearsals, **not** proof of a real-world launch
-Keep steps short and concrete. Never let the metaphor replace the technical requirement.
+## Reporting contract
+Report:
+1. Goal, risk mode, authorized scope and repo/branch/HEAD/diff
+2. Claims vs observations vs direct evidence, with paths and exact test commands
+3. Negative cases and attempted counterexamples
+4. What is mocked, untested, unverified or blocked
+5. Verdict for each claim: **VERIFIED, PARTIAL, FAILED, UNKNOWN, BLOCKED**
+6. GO/NO-GO recommendation, explicit approval boundary and rollback
+7. MEMORY.md lesson candidate with evidence status
 
-## Worked lesson: HairPlan P0-B (reported; not independently verified here)
-A first local report said 16 endpoints passed five authorization scenarios (80 checks). A subsequent read-only review identified three treatment-zone POST handlers gated with `view_client_records`, which could let `apprentice` users mutate treatments. Correct expected design: GET retains view permission; zone start/check/end POST require a stylist-level write gate, followed by fresh negative/positive tests and regression checks. This is an example of **coverage blindness**, not proof that the AI deliberately lied or hallucinated. Treat this example as a reported finding until independently reproduced in the target repo.
+Never confuse a documentation commit with activation of an agent workflow.
 
-## Commercial and governance boundaries
-This is a **supporting** skill, not a new member of the frozen 15 canonical V1 skills. Respect `AGENTS.md`, the canonical portfolio, target repo instructions and explicit Founder GO. Do not leak private AIQ Builder OS instructions, customer data, credentials or proprietary product implementation details. No claim of formal certification, guaranteed security or registered trademark.
+## Visual Architect teaching
+Explain in short Danish-first steps, with real business metaphors AND real technical mapping: `index.html` = front door; `src/` = workshop; `components/` = reusable workstations; database = customer archive; authentication = identity; authorization = keys; tenant isolation = separate salons. Show file names, actual control, and how to verify it. Metaphors do not replace technical proof.
 
-## Example invocation
-“Apply AIQ Truth-Driven Development to this change. Audit first, list claims and evidence, challenge the tests and authorization boundaries, report VERIFIED/PARTIAL/FAILED/UNKNOWN, and ask before any commit or deployment.”
+## Case lesson — reported HairPlan P0-B
+An initial report said 16 endpoints passed 80 authorization checks. A subsequent read-only review reported three treatment-zone POST handlers gated by `view_client_records`, allowing an apprentice role with read permission to mutate treatment data. Expected policy: GET retains read access; zone start/check/end POST require an appropriate stylist-level write gate, with negative and positive tests. **This is a reported coverage gap, not independently reproduced by this public skill and not proof of intentional AI deception.** Do not label fixed until the change and tests are verified.
+
+## Safe skill memory
+Read adjacent `MEMORY.md` for reviewed lessons and open hypotheses. MEMORY is a versioned project knowledge file, not a claim that the model's internal memory or all agents update automatically. Append only non-sensitive, generalized facts with status and provenance. Do not copy secrets, client data or private implementation details to this public repository.
+
+## Governance
+Supporting skill only; does **not** change the frozen 15 canonical V1 portfolio. Follow `AGENTS.md`, product repo instructions and Founder GO. Do not claim formal security certification, guaranteed bug detection, automatic tool integration or trademark registration.
+
+## Agent invocation
+“Use AIQ Truth-Driven Development V2. Audit before building, choose FAST/STRICT, define risks and tests first, implement only authorized scope, verify with exact evidence, challenge your own success claims, propose a MEMORY.md lesson, and ask for GO before any commit or deploy.”
